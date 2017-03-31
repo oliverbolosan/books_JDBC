@@ -26,8 +26,15 @@ public class projectDemoDAO
         while(running)
         {
             printMenu();
-            select = scan.nextInt();
-            scan.nextLine();
+            try
+            {
+                select = scan.nextInt();
+                scan.nextLine();
+            }
+            catch(InputMismatchException ex)
+            {
+                running = false;
+            }
             switch(select)
             {
                 case 1: 
@@ -190,19 +197,22 @@ public class projectDemoDAO
                         if(allPublishers.getName().equals(oldPublisherName))
                         {
                             bookDAO.updateBookPublisher(newPublisherName, oldPublisherName);
-                        }
-                        else
-                        {
-                            System.out.println("Invalid Publisher Name");
+                            break;
                         }
                     }
                     break;
                 case 9:
-                    System.out.print("Delete book by title: ");
+                    System.out.print("Enter book by title: ");
                     String deleteBookByTitle = scan.nextLine();
+                    System.out.print("Enter a group name: ");
+                    String deleteBookByGroup = scan.nextLine();
                     if(bookDAO.getBook(deleteBookByTitle) == null)
                     {
                         System.out.println("Invalid book title");
+                    }
+                    if(groupDAO.getWritingGroup(deleteBookByGroup) == null || !bookDAO.getBook(deleteBookByTitle).getGroupName().equals(deleteBookByGroup))
+                    {
+                        System.out.println("Invalid Group name");
                     }
                     else
                     {
